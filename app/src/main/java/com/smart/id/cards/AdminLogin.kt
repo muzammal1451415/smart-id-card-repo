@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import com.smart.id.cards.data.AdminUser
+import com.smart.id.cards.data.Student
 import kotlinx.android.synthetic.main.activity_admin_login.*
 
 
@@ -14,15 +15,18 @@ class AdminLogin : AppCompatActivity() {
     // FirebaseDatabase variables declaration
     var database: FirebaseDatabase? = null
     private var adminRef: DatabaseReference? = null
+    private var studentRef: DatabaseReference? = null
     var TAG = "AdminLogin"
     var from:String? = null
     var admins:MutableList<AdminUser> = arrayListOf()
+    var students:MutableList<Student> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_login)
         from = intent.getStringExtra("from")
         database = FirebaseDatabase.getInstance("https://smart-id-card-f2eab-default-rtdb.firebaseio.com/")
         adminRef = database!!.getReference("admins")
+        studentRef = database!!.getReference("students")
     }
     fun onClickLogin(view: View) {
         disableAllHelperTexts()
@@ -35,46 +39,92 @@ class AdminLogin : AppCompatActivity() {
         var password = editTextPassword.text.toString()
         var isUserExist = false
         var user:AdminUser? = null
+        var student:Student? = null
         admins.clear()
-        adminRef!!.addValueEventListener(object : ValueEventListener {
+        if(from.equals("student")){
+            studentRef!!.addValueEventListener(object : ValueEventListener {
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                dataSnapshot.children.forEach {
-                    admins.add(it.getValue(AdminUser::class.java)!!)
-                }
-
-                for (it in admins){
-                    if(it.username.equals(username)){
-                        user = it
-                        isUserExist = true
-                        break;
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    dataSnapshot.children.forEach {
+                        students.add(it.getValue(Student::class.java)!!)
                     }
-                }
 
-                if(isUserExist){
-                    if(password.equals(user?.password)){
-                        Intent(this@AdminLogin, UserOperations::class.java).also {
-                            startActivity(it)
+                    for (it in students){
+                        if(it.username.equals(username)){
+                            student = it
+                            isUserExist = true
+                            break;
+                        }
+                    }
+
+                    if(isUserExist){
+                        Log.i(TAG,"student: "+student)
+                        if(password.equals(student?.password)){
+                            Intent(this@AdminLogin, FingerPrintScan::class.java).also {
+                                it.putExtra("from","student")
+                                startActivity(it)
+                            }
+                        }else{
+                            textInput_password.helperText = "Password doesn't match"
+
                         }
                     }else{
-                        textInput_password.helperText = "Password doesn't match"
-
+                        textInput_username.helperText = "Student not exist"
                     }
-                }else{
-                    textInput_username.helperText = "User not exist"
+
+
+
                 }
 
+                override fun onCancelled(error: DatabaseError) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException())
+                }
+            })
+        }else{
+            adminRef!!.addValueEventListener(object : ValueEventListener {
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    dataSnapshot.children.forEach {
+                        admins.add(it.getValue(AdminUser::class.java)!!)
+                    }
+
+                    for (it in admins){
+                        if(it.username.equals(username)){
+                            user = it
+                            isUserExist = true
+                            break;
+                        }
+                    }
+
+                    if(isUserExist){
+                        if(password.equals(user?.password)){
+                            Intent(this@AdminLogin, UserOperations::class.java).also {
+                                startActivity(it)
+                            }
+                        }else{
+                            textInput_password.helperText = "Password doesn't match"
+
+                        }
+                    }else{
+                        textInput_username.helperText = "User not exist"
+                    }
 
 
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException())
+                }
+            })
+        }
+
     }
     private fun isAllFieldsValid():Boolean{
         var status = true;
