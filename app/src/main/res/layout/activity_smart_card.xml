@@ -16,13 +16,14 @@
         android:layout_marginTop="@dimen/_50sdp"
         android:src="@drawable/logo" />
     <ImageView
+        android:id="@+id/iv_qr_image"
         android:layout_width="@dimen/_200sdp"
         android:layout_height="@dimen/_200sdp"
         android:src="@drawable/ic_baseline_qr_code_24"></ImageView>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nicole Kempis"
+        android:id="@+id/tv_name"
         android:textSize="@dimen/medium"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/_30sdp"
@@ -30,7 +31,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Student ID: STD009088389"
+        android:id="@+id/tv_type"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textSize="@dimen/medium"
+        android:textStyle="bold"
+        ></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/tv_username"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
         android:textSize="@dimen/medium"
         android:textStyle="bold"
@@ -38,7 +47,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date of Issue: 13/Aug/2021"
+        android:id="@+id/tv_emirates_id"
         android:layout_marginTop="@dimen/_10sdp"
         android:textSize="@dimen/medium"
         android:textStyle="bold"

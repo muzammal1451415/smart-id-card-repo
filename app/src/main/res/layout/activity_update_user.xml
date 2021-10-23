@@ -39,8 +39,8 @@
                 android:id="@+id/textInput_username"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="match_parent"
+                android:onClick="onClickUsername"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
                 app:hintTextColor="@color/colorDarkGrey"
                 app:helperTextTextColor="@color/colorRed"
                 android:hint="Username">
@@ -48,7 +48,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextUserID"
                     android:layout_width="match_parent"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="#F1F1F1"
+                    android:editable="false"
+                    android:onClick="onClickUsername"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/colorLightGrey"
                     android:textColor="@color/black"

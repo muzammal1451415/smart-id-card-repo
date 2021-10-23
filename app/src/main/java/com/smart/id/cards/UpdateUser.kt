@@ -1,5 +1,6 @@
 package com.smart.id.cards
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -44,9 +45,11 @@ class UpdateUser : AppCompatActivity() {
     var storageReference: StorageReference? = null
     var database: FirebaseDatabase? = null
     var databaseReference: DatabaseReference? = null
+    var progressDialog:ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_user)
+        progressDialog = ProgressDialog(this)
         storage = FirebaseStorage.getInstance("gs://smart-id-card-f2eab.appspot.com");
         database = FirebaseDatabase.getInstance("https://smart-id-card-f2eab-default-rtdb.firebaseio.com/")
         databaseReference = database?.getReference("students")
@@ -214,8 +217,12 @@ class UpdateUser : AppCompatActivity() {
 
     // Getting all Users list from database
     private fun getUser(){
+        progressDialog?.setMessage("User info is getting, please wait...")
+        progressDialog?.show()
+
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
+                progressDialog?.dismiss()
                 Toast
                     .makeText(
                         this@UpdateUser,
@@ -224,8 +231,8 @@ class UpdateUser : AppCompatActivity() {
                     )
                     .show()
             }
-
             override fun onDataChange(snapshot: DataSnapshot) {
+                progressDialog?.dismiss()
                 isUserExtracted = true
                 snapshot.children.forEach {
 
@@ -233,6 +240,11 @@ class UpdateUser : AppCompatActivity() {
                     users.add(std!!)
 
                     Log.i(TAG,"USERID: "+std?.username)
+                }
+                if(users.size==0){
+                    Toast.makeText(this@UpdateUser,"No user found in database",Toast.LENGTH_SHORT).show()
+                    onBackPressed()
+                    return
                 }
                 var username = intent.getStringExtra("username")
                 username?.let{
@@ -277,9 +289,16 @@ class UpdateUser : AppCompatActivity() {
 
             }
         })
+
+
     }
 
     fun onClickProfileImage(view: View) {
         selectImage()
+    }
+
+    fun onClickUsername(view: View) {
+        Toast.makeText(this@UpdateUser,"Username cannot be changed",Toast.LENGTH_SHORT).show()
+
     }
 }

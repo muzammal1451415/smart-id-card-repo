@@ -61,6 +61,7 @@ class FingerPrintScan : AppCompatActivity() {
         bottomText = intent.getStringExtra("bottom")
         fromActivity = intent.getStringExtra("from")
         topScreenTextView?.text = topText
+        Log.i(TAG,"FromActivity: "+fromActivity)
         initFingerprintVerification()
         getUser()
         if(checkIfDeviceEnabledBioMetrics()){
@@ -87,6 +88,7 @@ class FingerPrintScan : AppCompatActivity() {
 
                     if(fromActivity.equals("student")){
                         Intent(applicationContext,SmartCard::class.java).also {
+                            it.putExtra("data",intent.getStringExtra("data"))
                             startActivity(it)
                         }
                     }
@@ -450,14 +452,10 @@ class FingerPrintScan : AppCompatActivity() {
                 }
             }
             else{
-                Toast
-                        .makeText(
-                                this@FingerPrintScan,
-                                "User does not exist!",
-                                Toast.LENGTH_SHORT
-                        )
-                        .show()
-                onBackPressed()
+                fingerPrintImageView?.visibility = View.GONE
+                tickImageView?.setImageDrawable( getDrawable(R.drawable.ic_error))
+                tickImageView?.visibility = View.VISIBLE
+                bottomScreenTextView?.text = "'$username' username doesn't exist"
             }
         }
 

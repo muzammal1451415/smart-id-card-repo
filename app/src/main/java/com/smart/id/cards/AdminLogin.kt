@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
+import com.google.gson.Gson
 import com.smart.id.cards.data.AdminUser
 import com.smart.id.cards.data.Student
+import com.smart.id.cards.utils.SmartCareSharedPreferences
 import kotlinx.android.synthetic.main.activity_admin_login.*
 
 
@@ -20,10 +22,12 @@ class AdminLogin : AppCompatActivity() {
     var from:String? = null
     var admins:MutableList<AdminUser> = arrayListOf()
     var students:MutableList<Student> = arrayListOf()
+    var smartCardSharedPreferences:SmartCareSharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_login)
         from = intent.getStringExtra("from")
+        smartCardSharedPreferences = SmartCareSharedPreferences(this,"profileInfo")
         database = FirebaseDatabase.getInstance("https://smart-id-card-f2eab-default-rtdb.firebaseio.com/")
         adminRef = database!!.getReference("admins")
         studentRef = database!!.getReference("students")
@@ -64,6 +68,7 @@ class AdminLogin : AppCompatActivity() {
                         if(password.equals(student?.password)){
                             Intent(this@AdminLogin, FingerPrintScan::class.java).also {
                                 it.putExtra("from","student")
+                                it.putExtra("data",Gson().toJson(student))
                                 startActivity(it)
                             }
                         }else{
@@ -103,8 +108,11 @@ class AdminLogin : AppCompatActivity() {
 
                     if(isUserExist){
                         if(password.equals(user?.password)){
+                            smartCardSharedPreferences?.saveBooleanValue("login",true)
                             Intent(this@AdminLogin, UserOperations::class.java).also {
                                 startActivity(it)
+                                finish()
+                                finishAffinity()
                             }
                         }else{
                             textInput_password.helperText = "Password doesn't match"
