@@ -391,7 +391,7 @@ class FingerPrintScan : AppCompatActivity() {
 
     // Getting all Users list from database
     private fun getUser(){
-        databaseReference?.addValueEventListener(object : ValueEventListener{
+        databaseReference?.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 Toast
                     .makeText(

@@ -46,12 +46,13 @@ class AdminLogin : AppCompatActivity() {
         var student:Student? = null
         admins.clear()
         if(from.equals("student")){
-            studentRef!!.addValueEventListener(object : ValueEventListener {
+            studentRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    dataSnapshot.children.forEach {
+                    students.clear()
+                    for(it in dataSnapshot.children){
                         students.add(it.getValue(Student::class.java)!!)
                     }
 
@@ -89,7 +90,7 @@ class AdminLogin : AppCompatActivity() {
                 }
             })
         }else{
-            adminRef!!.addValueEventListener(object : ValueEventListener {
+            adminRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     // This method is called once with the initial value and again
