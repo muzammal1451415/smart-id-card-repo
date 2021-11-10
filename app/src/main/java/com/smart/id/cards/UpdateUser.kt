@@ -59,7 +59,12 @@ class UpdateUser : AppCompatActivity() {
 
     fun onClickUpdate(view: View) {
         disableAllTextInputLayouts()
-        if(isAllFieldsValid()) {
+        var username:String = editTextUserID.text.toString()
+        var firstName:String = editTextFirstName.text.toString()
+        var lastName:String = editTextLastName.text.toString()
+        var emiratesID:String = editTextEmiratedID.text.toString()
+        var password:String = editTextPassword.text.toString()
+        if(isAllFieldsValid(username, firstName, lastName, emiratesID, password)) {
             Intent(this, FingerPrintScan::class.java).also {
                 var username:String = editTextUserID.text.toString()
                 var firstName:String = editTextFirstName.text.toString()
@@ -96,12 +101,8 @@ class UpdateUser : AppCompatActivity() {
             updateHelperText()
         }
     }
-    fun isAllFieldsValid():Boolean{
-        var username:String = editTextUserID.text.toString()
-        var firstName:String = editTextFirstName.text.toString()
-        var lastName:String = editTextLastName.text.toString()
-        var emiratesID:String = editTextEmiratedID.text.toString()
-        var password:String = editTextPassword.text.toString()
+    fun isAllFieldsValid(username: String,firstName:String,lastName:String,emiratesID:String,password:String):Boolean{
+
         Log.i(TAG,"username: $username")
         Log.i(TAG,"firstName: $firstName")
         Log.i(TAG,"lastName: $lastName")
@@ -217,6 +218,7 @@ class UpdateUser : AppCompatActivity() {
 
     // Getting all Users list from database
     private fun getUser(){
+        progressDialog = ProgressDialog(this)
         progressDialog?.setMessage("User info is getting, please wait...")
         progressDialog?.show()
 

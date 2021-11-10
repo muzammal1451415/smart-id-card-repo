@@ -14,7 +14,8 @@ class DeleteUser : AppCompatActivity() {
 
     fun onClickNext(view: View) {
         disableAllHelperTexts()
-        if(isAllFieldsValid()) {
+        var username = editTextUsername.text.toString()
+        if(isAllFieldsValid(username)) {
             var username = editTextUsername.text.toString()
             Intent(this, FingerPrintScan::class.java).also {
                 it.putExtra("from", "delete_user")
@@ -25,9 +26,8 @@ class DeleteUser : AppCompatActivity() {
             }
         }
     }
-    fun isAllFieldsValid():Boolean{
+    fun isAllFieldsValid(username:String):Boolean{
         var status = true
-        var username = editTextUsername.text.toString()
         if(username.isEmpty()){
             textInput_username.helperText = "Cannot be empty"
             return false

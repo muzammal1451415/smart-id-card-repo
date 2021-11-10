@@ -84,12 +84,13 @@ class AddUser : AppCompatActivity() {
     }
     fun onClickAdd(view: View) {
         disableAllTextInputLayouts()
-        if(isAllFieldsValid()) {
-            var username:String = editTextUserID.text.toString()
-            var firstName:String = editTextFirstName.text.toString()
-            var lastName:String = editTextLastName.text.toString()
-            var emiratesID:String = editTextEmiratedID.text.toString()
-            var password:String = editTextPassword.text.toString()
+        var username:String = editTextUserID.text.toString()
+        var firstName:String = editTextFirstName.text.toString()
+        var lastName:String = editTextLastName.text.toString()
+        var emiratesID:String = editTextEmiratedID.text.toString()
+        var password:String = editTextPassword.text.toString()
+        if(isAllFieldsValid(username, firstName, lastName, emiratesID, password,filePath.toString())) {
+
             var userTypeRadioID = radioGroupUserType.checkedRadioButtonId
             var userType = findViewById<RadioButton>(userTypeRadioID).text.toString()
             var genderRadioID = radioGroupGender.checkedRadioButtonId
@@ -108,18 +109,13 @@ class AddUser : AppCompatActivity() {
             updateHelperText()
         }
     }
-    fun isAllFieldsValid():Boolean{
-        var username:String = editTextUserID.text.toString()
-        var firstName:String = editTextFirstName.text.toString()
-        var lastName:String = editTextLastName.text.toString()
-        var emiratesID:String = editTextEmiratedID.text.toString()
-        var password:String = editTextPassword.text.toString()
+    fun isAllFieldsValid(username:String,firstName:String,lastName:String,emiratesID:String,password:String,filePath:String):Boolean{
         Log.i(TAG, "username: $username")
         Log.i(TAG, "firstName: $firstName")
         Log.i(TAG, "lastName: $lastName")
         Log.i(TAG, "emiratesID: $emiratesID")
         Log.i(TAG, "password: $password")
-        if(filePath==null){
+        if(filePath==""){
             return false
         }
         if(username.equals("")){

@@ -34,11 +34,13 @@ class AdminLogin : AppCompatActivity() {
     }
     fun onClickLogin(view: View) {
         disableAllHelperTexts()
-        if(isAllFieldsValid()) {
+        var username = editTextUserName.text.toString()
+        var password = editTextPassword.text.toString()
+        if(isAllFieldsValid(username,password)) {
            loginAdmin()
         }
     }
-    private fun loginAdmin(){
+     fun loginAdmin(){
         var username = editTextUserName.text.toString()
         var password = editTextPassword.text.toString()
         var isUserExist = false
@@ -135,10 +137,9 @@ class AdminLogin : AppCompatActivity() {
         }
 
     }
-    private fun isAllFieldsValid():Boolean{
+
+     fun isAllFieldsValid(username:String,password:String):Boolean{
         var status = true;
-        var username = editTextUserName.text.toString()
-        var password = editTextPassword.text.toString()
         if(username.isEmpty()){
             textInput_username.helperText = "Cannot be empty"
             status = false
@@ -149,7 +150,7 @@ class AdminLogin : AppCompatActivity() {
         }
         return status
     }
-    private fun disableAllHelperTexts(){
+    fun disableAllHelperTexts(){
         textInput_password.isHelperTextEnabled = false
         textInput_username.isHelperTextEnabled = false
     }

@@ -23,7 +23,8 @@ class EditUserUsername : AppCompatActivity() {
 
     fun onClickNext(view: View) {
         disableAllHelperTexts()
-        if(isAllFieldsValid()) {
+        var username = editTextUsername.text.toString()
+        if(isAllFieldsValid(username)) {
             var username = editTextUsername.text.toString()
             Intent(this, UpdateUser::class.java).also {
                 it.putExtra("username", username)
@@ -31,9 +32,9 @@ class EditUserUsername : AppCompatActivity() {
             }
         }
     }
-    fun isAllFieldsValid():Boolean{
+    fun isAllFieldsValid(username:String):Boolean{
         var status = true
-        var username = editTextUsername.text.toString()
+
         if(username.isEmpty()){
             textInput_username.helperText = "Cannot be empty"
             return false
